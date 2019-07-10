@@ -2,8 +2,7 @@ package ru.skillbranch.devintensive.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.abs
-import kotlin.math.absoluteValue
+import kotlin.math.*
 
 const val SECOND = 1000L
 const val MINUTE = SECOND * 60
@@ -66,11 +65,11 @@ enum class TimeUnits
 {
     SECOND
     {
-        override fun plural(value: Int) = pluralEx(value, arrayOf("секунда", "секунды", "секунд"))
+        override fun plural(value: Int) = pluralEx(value, arrayOf("секунду", "секунды", "секунд"))
     },
     MINUTE
     {
-        override fun plural(value: Int) = pluralEx(value, arrayOf("минута", "минуты", "минут"))
+        override fun plural(value: Int) = pluralEx(value, arrayOf("минуту", "минуты", "минут"))
     },
     HOUR
     {
@@ -86,13 +85,15 @@ enum class TimeUnits
     protected fun pluralEx(value: Int, arr: Array<String>): String
     {
         val absValue = abs(value)
-        val valueRem = abs(value % 10)
-        return when
-        {
-            (absValue == 1) || (absValue > 20 && valueRem == 1) -> "$absValue  ${arr[0].toString()}"
-            (absValue in 2..4) || (valueRem in 2..4) -> "$absValue ${arr[1].toString()}"
-            else -> "$absValue ${arr[2].toString()}"
-//                (absValue in 5..20) || (valueRem in 5..9) || (valueRem == 0) -> ""
-        }
+        val mod100Value = absValue % 100
+        val mod10Value = mod100Value % 10
+        return if (mod10Value in 5..9 || mod100Value in 5..20)
+            "$absValue ${arr[2].toString()}"
+        else if (mod10Value == 1)
+            "$absValue ${arr[0].toString()}"
+        else if (mod10Value in 2..4)
+            "$absValue ${arr[1].toString()}"
+        else
+            "$absValue ${arr[2].toString()}"
     }
 }
