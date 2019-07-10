@@ -11,16 +11,3 @@ fun String.truncate(len: Int = 16): String
 fun String.stripHtml(): String = this
     .replace("<[^>]*>".toRegex(), "")
     .replace("[ ]+".toRegex(), " ")
-
-//fun String.stripHtml(): String
-//{
-//    val matchResult = """<.+?>(.+)</.+?>""".toRegex().matchEntire(this)
-//    return if (matchResult != null)
-//    {
-//        matchResult.destructured.component1()
-//            .replace("""&|<|>|'|\"""".toRegex(), "")
-//            .replace("""[\s]{1,}""".toRegex(), " ")
-//    }
-//    else
-//        this
-//}
