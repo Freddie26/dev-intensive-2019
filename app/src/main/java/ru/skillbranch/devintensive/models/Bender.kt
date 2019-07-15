@@ -66,7 +66,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             override fun nextQuestion(): Question = PROFESSION
             override fun validate(answer: String): String?
             {
-                return if (answer[0].isLowerCase())
+                return if (answer.length == 0 || answer[0].isLowerCase())
                     "Имя должно начинаться с заглавной буквы"
                 else
                     null
@@ -78,7 +78,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             override fun nextQuestion(): Question = MATERIAL
             override fun validate(answer: String): String?
             {
-                return if (answer[0].isUpperCase())
+                return if (answer.length == 0 || answer[0].isUpperCase())
                     "Профессия должна начинаться со строчной буквы"
                 else
                     null
@@ -89,7 +89,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             override fun nextQuestion(): Question = BDAY
             override fun validate(answer: String): String?
             {
-                return if (answer.contains("""[^0-9]""".toRegex()))
+                return if (answer.matches("""[^0-9]""".toRegex()))
                     null
                 else
                     "Материал не должен содержать цифр"
@@ -100,7 +100,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             override fun nextQuestion(): Question = SERIAL
             override fun validate(answer: String): String?
             {
-                return if (answer.contains("""[0-9]""".toRegex()))
+                return if (answer.matches("""[0-9]""".toRegex()))
                     null
                 else
                     "Год моего рождения должен содержать только цифры"
@@ -111,7 +111,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             override fun nextQuestion(): Question = IDLE
             override fun validate(answer: String): String?
             {
-                return if (answer.contains("""[0-9]{7}""".toRegex()))
+                return if (answer.matches("""[0-9]{7}""".toRegex()))
                     null
                 else
                     "Серийный номер содержит только цифры, и их 7"
@@ -122,13 +122,6 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             override fun nextQuestion(): Question = IDLE
             override fun validate(answer: String): String? = null
         };
-
-//        Question.NAME ->
-//        Question.PROFESSION -> ""
-//        Question.MATERIAL -> ""
-//        Question.BDAY -> ""
-//        Question.SERIAL -> ""
-//        Question.IDLE -> //игнорировать валидацию
 
         abstract fun nextQuestion(): Question
         abstract fun validate(answer: String): String?

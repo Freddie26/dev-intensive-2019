@@ -95,25 +95,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
         Log.d("M_MainActivity", "onSaveInstanceState ${benderObj.status.name} ${benderObj.question.name}")
     }
 
+    fun notifyBender(): Unit
+    {
+        val (phrase, color) = benderObj.listenAnswer(messageEt.text.toString())
+        this.hideKeyboard()
+        messageEt.setText("")
+        val (r, g, b) = color
+        benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
+        textTxt.text = phrase
+    }
+
     override fun onClick(view: View?)
     {
         if (view?.id == R.id.iv_send)
-        {
-            val (phrase, color) = benderObj.listenAnswer(et_message.text.toString())
-            this.hideKeyboard()
-            messageEt.setText("")
-            val (r, g, b) = color
-            benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
-            textTxt.text = phrase
-        }
+            notifyBender()
     }
 
     override fun onEditorAction(textView: TextView?, actionId: Int, event: KeyEvent?): Boolean
     {
         if (textView?.id == R.id.et_message)
         {
-            if (this.isKeyboardOpen())
-                this.hideKeyboard()
+            notifyBender()
             return true
         }
         else
