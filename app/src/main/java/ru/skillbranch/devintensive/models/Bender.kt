@@ -19,7 +19,8 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
     {
         val validationResult = question.validate(answer)
         return if (validationResult != null)
-            validationResult to status.color
+            "$validationResult\n" +
+                    "${question.question}" to status.color
         else if (question.answers.contains(answer))
         {
             question = question.nextQuestion()
@@ -40,7 +41,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             else
             {
                 status = status.nextStatus()
-                "Это неправильный ответ!\n" +
+                "Это неправильный ответ\n" +
                         "${question.question}" to status.color
             }
         }
@@ -89,10 +90,10 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             override fun nextQuestion(): Question = BDAY
             override fun validate(answer: String): String?
             {
-                return if (answer.matches("""[^0-9]""".toRegex()))
-                    null
-                else
+                return if (answer.contains("""[0-9]""".toRegex()))
                     "Материал не должен содержать цифр"
+                else
+                    null
             }
         },
         BDAY("Когда меня создали?", listOf("2993"))
