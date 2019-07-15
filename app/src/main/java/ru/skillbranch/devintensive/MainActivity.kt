@@ -8,6 +8,7 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -113,7 +114,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, TextView.OnEdito
 
     override fun onEditorAction(textView: TextView?, actionId: Int, event: KeyEvent?): Boolean
     {
-        if (textView?.id == R.id.et_message)
+        if (textView?.id == R.id.et_message &&
+            ((event?.keyCode == KeyEvent.KEYCODE_ENTER && event?.action == KeyEvent.ACTION_DOWN) || actionId == EditorInfo.IME_ACTION_DONE))
         {
             notifyBender()
             return true
