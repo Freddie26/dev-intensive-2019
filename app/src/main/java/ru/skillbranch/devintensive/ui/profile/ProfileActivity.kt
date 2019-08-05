@@ -5,15 +5,19 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.ui.custom.CircleImageView
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 
@@ -30,7 +34,6 @@ class ProfileActivity : AppCompatActivity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         initViews(savedInstanceState)
@@ -38,9 +41,7 @@ class ProfileActivity : AppCompatActivity()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.d("M_MainActivity", "onSaveInstanceState")
         super.onSaveInstanceState(outState)
-
         outState.putBoolean(IS_EDIT_MODE, isEditMode)
     }
 
@@ -48,10 +49,15 @@ class ProfileActivity : AppCompatActivity()
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer { updateUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
+        viewModel.getIsRepositoryError().observe(this, Observer { showRepositoryError(it) })
+    }
+
+    private fun showRepositoryError(isError: Boolean) {
+        wr_repository.error = if (isError) "Невалидный адрес репозитория" else null
+        wr_repository.isErrorEnabled = isError
     }
 
     private fun updateTheme(mode: Int) {
-        Log.d("M_ProfileActivity", "updateTheme")
         delegate.setLocalNightMode(mode)
     }
 
@@ -60,6 +66,25 @@ class ProfileActivity : AppCompatActivity()
             for ((k, v) in viewFields){
                 v.text = it[k].toString()
             }
+        }
+
+        setAvatar(profile)
+    }
+
+    fun setAvatar(profile: Profile){
+        val initials = profile.initials?.trim() ?: ""
+        if (initials.isBlank())
+            iv_avatar.setImageResource(R.drawable.avatar_default)
+        else {
+            val color = TypedValue()
+            theme.resolveAttribute(R.attr.colorAccent, color, true)
+
+            iv_avatar.setImageDrawable(
+                CircleImageView.Companion.InitialsDrawable(
+                    profile.initials!!,
+                    color.data
+                )
+            )
         }
     }
 
@@ -87,6 +112,16 @@ class ProfileActivity : AppCompatActivity()
         btn_switch_theme.setOnClickListener {
             viewModel.switchTheme()
         }
+
+        et_repository.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onRepositoryTextChanged(s.toString())
+            }
+        })
+
+        iv_avatar.setImageResource(R.drawable.avatar_default)
     }
 
     private fun showCurrentMode(isEdit: Boolean) {

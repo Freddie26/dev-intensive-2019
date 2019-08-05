@@ -70,4 +70,39 @@ object Utils {
         val secondInitial = lastName?.take(1) ?: ""
         return ("$firstInitial$secondInitial").toUpperCase()
     }
+
+    fun validateRepository(repository: String) : Boolean{
+        if (repository.isBlank())
+            return true
+        var s = repository
+        if (s.startsWith("https://"))
+            s = s.replace("https://", "")
+        if (s.startsWith("www."))
+            s = s.replace("www.", "")
+        if (!s.startsWith("github.com/"))
+            return false
+        s = s.replace("github.com/", "")
+        if (s.contains('/'))
+            return false
+
+        setOf(
+            "enterprise",
+            "features",
+            "topics",
+            "collections",
+            "trending",
+            "events",
+            "marketplace",
+            "pricing",
+            "nonprofit",
+            "customer-stories",
+            "security",
+            "login",
+            "join").forEach {
+            if (s.endsWith(it))
+                return false
+        }
+
+        return true
+    }
 }

@@ -33,16 +33,14 @@
                     android:src="@drawable/ic_switch_day_night"
                     android:layout_toStartOf="@id/iv_avatar"
                     android:layout_marginEnd="@dimen/spacing_huge_32"
-                    android:layout_marginTop="36dp"
-                    android:contentDescription="@string/profile_description_theme"/>
+                    android:layout_marginTop="36dp"/>
 
-            <ImageView
+            <ru.skillbranch.devintensive.ui.custom.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="@dimen/avatar_round_size"
                     android:layout_height="@dimen/avatar_round_size"
-                    android:src="@drawable/avatar_default"
                     android:layout_centerHorizontal="true"
-                    android:contentDescription="@string/profile_description_avatar"/>
+                    app:cv_borderWidth="2dp"/>
 
             <ImageButton
                     android:id="@+id/btn_edit"
@@ -52,8 +50,7 @@
                     android:src="@drawable/ic_edit_black_24dp"
                     android:layout_toEndOf="@id/iv_avatar"
                     android:layout_marginStart="@dimen/spacing_huge_32"
-                    android:layout_marginTop="36dp"
-                    android:contentDescription="@string/profile_description_editing"/>
+                    android:layout_marginTop="36dp"/>
 
             <TextView
                     style="@style/Profile.Header.Nickname"
@@ -147,8 +144,7 @@
                 android:id="@+id/ic_avatar"
                 android:layout_width="@dimen/btn_round_size_40"
                 android:layout_height="@dimen/btn_round_size_40"
-                android:src="@drawable/ic_avatar"
-                android:contentDescription="@string/profile_description_avatar"/>
+                android:src="@drawable/ic_avatar"/>
 
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/wr_first_name"
