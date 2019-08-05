@@ -27,8 +27,12 @@ class ProfileViewModel: ViewModel() {
         fun getIsRepositoryError(): LiveData<Boolean> = isRepositoryError
 
     fun saveProfileData(profile: Profile) {
-        repository.saveProfile(profile)
-        profileData.value = profile
+        val otherProfile = if (isRepositoryError.value!!)
+            profile.copy(repository = "")
+        else
+            profile
+        repository.saveProfile(otherProfile)
+        profileData.value = otherProfile
     }
 
     fun switchTheme() {
